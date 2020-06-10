@@ -4,6 +4,7 @@ import {
   Column,
   CreateDateColumn,
   ManyToOne,
+  JoinColumn,
 } from 'typeorm'
 
 import { Cart } from './Cart'
@@ -17,13 +18,20 @@ export class CartItem {
   @ManyToOne(() => Cart, (item) => item.items)
   cart: Cart
 
-  @ManyToOne(() => Product)
+  @Column({ type: 'integer' })
+  cartId: number
+
+  @ManyToOne(() => Product, { eager: true })
+  @JoinColumn()
   product: Product
+
+  @Column({ type: 'integer' })
+  productId: number
 
   @Column({ type: 'integer' })
   quantity: number
 
-  @Column({ length: 255 })
+  @Column({ length: 255, nullable: true })
   comments: string
 
   @CreateDateColumn()

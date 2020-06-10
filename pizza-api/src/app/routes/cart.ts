@@ -1,19 +1,28 @@
 import { Router } from 'express'
 
 import { AuthService } from '../services/AuthService'
+import { CartController } from '../controllers/CartController'
 
 const router = Router()
 
 // Get any active cart
-router.get('/', AuthService.authMiddleware, (_, res) => res.json({ notImplemented: true }))
+router.get('/', AuthService.authMiddleware, CartController.get)
 
-// Creating a new cart (adding first item)
-router.post('/', AuthService.authMiddleware, (_, res) => res.json({ notImplemented: true }))
+// Adding an item (it creates a cart if it don't exists)
+router.post('/', AuthService.authMiddleware, CartController.addItem)
 
-// Updating the cart (adding or removing items)
-router.patch('/:cartId', AuthService.authMiddleware, (_, res) => res.json({ notImplemented: true }))
+// Update cart item
+router.patch(
+  '/:cartId/:cartItemId',
+  AuthService.authMiddleware,
+  CartController.updateItem
+)
 
-// Remove cart (once remove all items inside the cart)
-router.delete('/:cartId', AuthService.authMiddleware, (_, res) => res.json({ notImplemented: true }))
+// Remove cart item
+router.delete(
+  '/:cartId/:cartItemId',
+  AuthService.authMiddleware,
+  CartController.removeItem
+)
 
 export default router

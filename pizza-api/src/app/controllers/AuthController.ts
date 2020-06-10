@@ -53,7 +53,7 @@ export class AuthController {
       return res.status(422).json({ message: 'This email is already in use' })
     }
 
-    return res.json(await AuthController.userToken(user))
+    return res.status(201).json(await AuthController.userToken(user))
   }
 
   static async renewToken(req: Request, res: Response) {

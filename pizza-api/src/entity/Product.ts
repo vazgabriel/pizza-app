@@ -17,7 +17,6 @@ export class Product {
   id: number
 
   @Column({ length: 60, unique: true })
-  @Index()
   name: string
 
   @Column({ length: 255 })

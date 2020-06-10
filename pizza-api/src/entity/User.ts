@@ -4,6 +4,7 @@ import {
   Column,
   CreateDateColumn,
   BeforeInsert,
+  Index,
 } from 'typeorm'
 import bcrypt from 'bcrypt'
 

@@ -5,14 +5,19 @@ import {
   JoinColumn,
   OneToOne,
   CreateDateColumn,
+  ManyToOne,
+  Index,
 } from 'typeorm'
 
 import { Cart } from './Cart'
+import { User } from './User'
 
 export enum Currency {
   EURO = 'EUR',
   DOLAR = 'USD',
 }
+
+export const CURRENCIES = [Currency.EURO, Currency.DOLAR]
 
 @Entity()
 export class Checkout {
@@ -22,7 +27,7 @@ export class Checkout {
   @Column({ length: 100 })
   address: string
 
-  @Column({ length: 50 })
+  @Column({ length: 50, nullable: true })
   address_2: string
 
   @Column({ type: 'integer' })
@@ -39,11 +44,22 @@ export class Checkout {
     enum: Currency,
     default: Currency.EURO,
   })
+  @Index()
   currency: string
 
   @OneToOne(() => Cart)
   @JoinColumn()
   cart: Cart
+
+  @Column({ type: 'integer' })
+  cartId: number
+
+  @ManyToOne(() => User)
+  user: User
+
+  @Column({ type: 'integer' })
+  @Index()
+  userId: number
 
   @CreateDateColumn()
   createdAt: Date

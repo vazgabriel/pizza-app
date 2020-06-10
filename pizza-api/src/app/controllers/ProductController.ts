@@ -8,9 +8,9 @@ export class ProductController {
     const where: FindConditions<Product> = {}
 
     if (req.query.type) {
-      where.type = req.query.type as string
+      where.type = req.query.type.toString()
     }
 
-    return res.json(await getRepository(Product).find({ where }))
+    return res.json(await getRepository(Product).find({ where, cache: true }))
   }
 }
