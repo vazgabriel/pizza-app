@@ -30,4 +30,5 @@ export const appSettings = {
   production: process.env.NODE_ENV === 'production',
   port: isNaN(port) ? 8080 : port,
   database,
+  jwtSecret: process.env.JWT_SECRET || 'jwt@secret',
 }

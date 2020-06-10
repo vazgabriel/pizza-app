@@ -3,6 +3,7 @@ import {
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
+  Index,
 } from 'typeorm'
 
 export enum ProductType {
@@ -16,6 +17,7 @@ export class Product {
   id: number
 
   @Column({ length: 60, unique: true })
+  @Index()
   name: string
 
   @Column({ length: 255 })
@@ -29,6 +31,7 @@ export class Product {
     enum: ProductType,
     default: ProductType.PIZZA,
   })
+  @Index()
   type: string
 
   @Column({ type: 'integer' })

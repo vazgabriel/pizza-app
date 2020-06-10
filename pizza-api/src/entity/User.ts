@@ -32,4 +32,8 @@ export class User {
     const salt = await bcrypt.genSalt()
     this.password = await bcrypt.hash(password || this.password, salt)
   }
+
+  async checkPassword(password: string) {
+    return await bcrypt.compare(password, this.password)
+  }
 }

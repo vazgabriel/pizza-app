@@ -10,7 +10,9 @@
     "@types/jsonwebtoken": "^8.5.0",
     "@types/morgan": "^1.9.0",
     "@types/node": "^8.0.29",
+    "@types/validator": "^13.0.0",
     "ts-node": "3.3.0",
+    "ts-node-dev": "^1.0.0-pre.44",
     "typescript": "3.3.3333"
   },
   "dependencies": {
@@ -24,9 +26,11 @@
     "pg": "^7.3.0",
     "reflect-metadata": "^0.1.10",
     "typeorm": "0.2.25",
-    "typeorm-seeding": "^1.6.1"
+    "typeorm-seeding": "^1.6.1",
+    "validator": "^13.1.0"
   },
   "scripts": {
+    "dev": "ts-node-dev --respawn --transpileOnly src/index.ts",
     "start": "ts-node src/index.ts",
     "seed:config": "ts-node ./node_modules/typeorm-seeding/dist/cli.js config",
     "seed:run": "ts-node ./node_modules/typeorm-seeding/dist/cli.js seed"
