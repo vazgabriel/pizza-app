@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import { getRepository, FindConditions } from 'typeorm'
 
+import { HOURLY } from '../constants'
 import { Product } from '../../entity/Product'
 
 export class ProductController {
@@ -11,6 +12,6 @@ export class ProductController {
       where.type = req.query.type.toString()
     }
 
-    return res.json(await getRepository(Product).find({ where, cache: true }))
+    return res.json(await getRepository(Product).find({ where, cache: HOURLY }))
   }
 }

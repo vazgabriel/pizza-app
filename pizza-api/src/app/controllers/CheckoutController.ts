@@ -1,6 +1,7 @@
 import { getRepository, getManager } from 'typeorm'
 import { Request, Response } from 'express'
 
+import { MONTHLY } from '../constants'
 import { Cart } from '../../entity/Cart'
 import { Checkout, Currency, CURRENCIES } from '../../entity/Checkout'
 
@@ -25,7 +26,7 @@ export class CheckoutController {
         id,
         userId: req.user!.id,
       },
-      cache: 1000 * 60 * 60 * 24 * 30,
+      cache: MONTHLY,
       relations: ['cart']
     })
 

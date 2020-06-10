@@ -1,7 +1,6 @@
 import { Router } from 'express'
 
 import { Currency } from '../../entity/Checkout'
-
 import { AuthService } from '../services/AuthService'
 import { CheckoutController } from '../controllers/CheckoutController'
 
