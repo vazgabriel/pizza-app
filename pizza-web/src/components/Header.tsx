@@ -1,6 +1,7 @@
 import React from 'react'
-import { Box, Flex, Heading, useDisclosure } from '@chakra-ui/core'
+import { Link } from 'react-router-dom'
 import { FaShoppingCart } from 'react-icons/fa'
+import { Box, Flex, Heading, useDisclosure } from '@chakra-ui/core'
 
 import CartDrawer from './CartDrawer'
 
@@ -19,9 +20,11 @@ export default function Header() {
         justify='space-between'
       >
         <Flex align='center' mr={5}>
-          <Heading as='h1' size='lg'>
-            Awesome Pizza
-          </Heading>
+          <Link to='/'>
+            <Heading as='h1' size='lg' cursor='pointer'>
+              Awesome Pizza
+            </Heading>
+          </Link>
         </Flex>
 
         <Box
