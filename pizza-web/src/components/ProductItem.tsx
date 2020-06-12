@@ -1,4 +1,5 @@
 import React from 'react'
+import { FaTrashAlt } from 'react-icons/fa'
 import { useSelector, useDispatch } from 'react-redux'
 import { Box, Image, Button, Flex, Icon } from '@chakra-ui/core'
 
@@ -57,53 +58,61 @@ export default function ProductItem({
             &nbsp;- $ {((product.price * USD) / 100).toFixed(2)}
           </Box>
         </Box>
-        <Box pt='16px'>
-          {itemCart ? (
-            <Flex>
-              <Button
-                variantColor='teal'
-                variant='link'
-                onClick={() => {
-                  if (itemCart?.quantity === 1) {
-                    setToDeleteId(product.id)
-                  } else {
+        <Flex pt='16px' justify='space-between'>
+          <Box>
+            {itemCart ? (
+              <Flex>
+                <Button
+                  variantColor='teal'
+                  variant='link'
+                  onClick={() => {
+                    if (itemCart?.quantity === 1) {
+                      setToDeleteId(product.id)
+                    } else {
+                      dispatch(
+                        updateItem({
+                          ...itemCart!,
+                          quantity: itemCart!.quantity - 1,
+                        })
+                      )
+                    }
+                  }}
+                >
+                  <Icon name='minus' />
+                </Button>
+                {itemCart.quantity}
+                <Button
+                  variantColor='teal'
+                  variant='link'
+                  isDisabled={itemCart.quantity > 4}
+                  onClick={() =>
                     dispatch(
                       updateItem({
                         ...itemCart!,
-                        quantity: itemCart!.quantity - 1,
+                        quantity: itemCart!.quantity + 1,
                       })
                     )
                   }
-                }}
-              >
-                <Icon name='minus' />
-              </Button>
-              {itemCart.quantity}
+                >
+                  <Icon name='add' />
+                </Button>
+              </Flex>
+            ) : (
               <Button
                 variantColor='teal'
                 variant='link'
-                onClick={() =>
-                  dispatch(
-                    updateItem({
-                      ...itemCart!,
-                      quantity: itemCart!.quantity + 1,
-                    })
-                  )
-                }
+                onClick={() => dispatch(addItem(product))}
               >
-                <Icon name='add' />
+                Add to Cart
               </Button>
-            </Flex>
-          ) : (
-            <Button
-              variantColor='teal'
-              variant='link'
-              onClick={() => dispatch(addItem(product))}
-            >
-              Add to Cart
+            )}
+          </Box>
+          {!!itemCart && (
+            <Button variant='link' onClick={() => setToDeleteId(product.id)}>
+              <Box as={FaTrashAlt} size='24px' color='red.500' />
             </Button>
           )}
-        </Box>
+        </Flex>
       </Box>
       <RemoveProductDialog
         productName={product.name}

@@ -1,5 +1,6 @@
 import { Router } from 'express'
 
+import { DAILY } from '../constants/times'
 import { Currency } from '../../entity/Checkout'
 import { AuthService } from '../services/AuthService'
 import { CheckoutController } from '../controllers/CheckoutController'
@@ -7,13 +8,15 @@ import { CheckoutController } from '../controllers/CheckoutController'
 const router = Router()
 
 // Get currency value (compared to EUR)
-router.get('/currency/:currency', async (req, res) =>
+router.get('/currency/:currency', async (req, res) => {
+  res.set('Cache-Control', `public, max-age=${DAILY}`)
+
   res.json({
     value: await CheckoutController.getCurrencyValue(
       req.params.currency as Currency
     ),
   })
-)
+})
 
 // Get purchase history
 router.get(

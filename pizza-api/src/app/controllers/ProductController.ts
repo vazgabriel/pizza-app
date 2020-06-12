@@ -15,8 +15,9 @@ export class ProductController {
     try {
       const products = await getRepository(Product).find({
         where,
-        cache: HOURLY,
       })
+
+      res.set('Cache-Control', `public, max-age=${HOURLY}`)
       return res.json(products)
     } catch (error) {
       return res.status(400).json({ message: 'Invalid type' })

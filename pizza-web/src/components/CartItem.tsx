@@ -1,4 +1,5 @@
 import React from 'react'
+import { FaTrashAlt } from 'react-icons/fa'
 import { useSelector, useDispatch } from 'react-redux'
 import {
   Avatar,
@@ -52,39 +53,45 @@ export default function CartItem({ item, toDeleteId, setToDeleteId }: Props) {
             </Heading>
           </Box>
         </Flex>
-        <Flex align='center' justify='center' pt='16px'>
-          <Button
-            variantColor='teal'
-            variant='link'
-            onClick={() => {
-              if (quantity === 1) {
-                setToDeleteId(product.id)
-              } else {
+        <Flex justify='space-between' pt='16px'>
+          <Box>
+            <Button
+              variantColor='teal'
+              variant='link'
+              onClick={() => {
+                if (quantity === 1) {
+                  setToDeleteId(product.id)
+                } else {
+                  dispatch(
+                    updateItem({
+                      ...item,
+                      quantity: quantity - 1,
+                    })
+                  )
+                }
+              }}
+            >
+              <Icon name='minus' />
+            </Button>
+            {quantity}
+            <Button
+              variantColor='teal'
+              variant='link'
+              isDisabled={quantity > 4}
+              onClick={() =>
                 dispatch(
                   updateItem({
                     ...item,
-                    quantity: quantity - 1,
+                    quantity: quantity + 1,
                   })
                 )
               }
-            }}
-          >
-            <Icon name='minus' />
-          </Button>
-          {quantity}
-          <Button
-            variantColor='teal'
-            variant='link'
-            onClick={() =>
-              dispatch(
-                updateItem({
-                  ...item,
-                  quantity: quantity + 1,
-                })
-              )
-            }
-          >
-            <Icon name='add' />
+            >
+              <Icon name='add' />
+            </Button>
+          </Box>
+          <Button variant='link' onClick={() => setToDeleteId(product.id)}>
+            <Box as={FaTrashAlt} size='24px' color='red.500' />
           </Button>
         </Flex>
       </ListItem>
