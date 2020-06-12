@@ -43,23 +43,25 @@ export default function Header() {
             cursor='pointer'
             onClick={onOpen}
           />
-          <Flex
-            align='center'
-            justify='center'
-            backgroundColor='blue.500'
-            color='gray.100'
-            borderRadius='100%'
-            position='absolute'
-            p='8px'
-            h='22px'
-            w='22px'
-            top='0px'
-            right='-12px'
-            fontSize={items > 99 ? '10px' : '12px'}
-            lineHeight='22px'
-          >
-            {items > 0 && (items > 99 ? '+99' : items)}
-          </Flex>
+          {items > 0 && (
+            <Flex
+              align='center'
+              justify='center'
+              backgroundColor='blue.500'
+              color='gray.100'
+              borderRadius='100%'
+              position='absolute'
+              p='8px'
+              h='22px'
+              w='22px'
+              top='0px'
+              right='-12px'
+              fontSize={items > 99 ? '10px' : '12px'}
+              lineHeight='22px'
+            >
+              {items > 99 ? '+99' : items}
+            </Flex>
+          )}
         </Box>
       </Flex>
       <CartDrawer isOpen={isOpen} onClose={onClose} />
