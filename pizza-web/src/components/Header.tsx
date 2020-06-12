@@ -12,12 +12,15 @@ export default function Header() {
     <>
       <Flex
         as='nav'
-        bg='gray.700'
-        shadow='md'
-        color='white'
-        padding='1.5rem'
         align='center'
+        bg='gray.700'
+        color='white'
         justify='space-between'
+        padding='1.5rem'
+        shadow='md'
+        position='fixed'
+        w='100%'
+        zIndex={1}
       >
         <Flex align='center' mr={5}>
           <Link to='/'>

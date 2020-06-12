@@ -1,4 +1,4 @@
-import { call, put, select } from 'redux-saga/effects'
+import { call, put, select, delay } from 'redux-saga/effects'
 
 import { api } from '../../api'
 import { login } from '../ducks/user'
@@ -46,13 +46,23 @@ export function* renewToken() {
   if (!token) {
     return
   }
+  let retries = 0
 
-  try {
-    const response = yield call(api.get, '/auth/renew-token', {
-      headers: {
-        Authorization: token,
-      },
-    })
-    yield put(login(response.data))
-  } catch (error) {}
+  while (retries < 10) {
+    try {
+      if (retries > 0) {
+        yield delay(1000)
+      }
+      const response = yield call(api.get, '/auth/renew-token', {
+        headers: {
+          Authorization: token,
+        },
+      })
+      yield put(login(response.data))
+
+      retries = 10
+    } catch (error) {
+      retries++
+    }
+  }
 }
