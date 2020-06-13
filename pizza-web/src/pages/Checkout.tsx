@@ -1,10 +1,12 @@
 import React from 'react'
-import { Heading } from '@chakra-ui/core'
+import { useSelector } from 'react-redux'
+
+import Auth from '../components/Auth'
+import { AppState } from '../store/ducks'
+import CheckoutSteps from '../components/CheckoutSteps'
 
 export default function Checkout() {
-  return (
-    <Heading as='h1' size='lg'>
-      Checkout
-    </Heading>
-  )
+  const token = useSelector((state: AppState) => state.user.token)
+
+  return !!token ? <CheckoutSteps /> : <Auth />
 }

@@ -16,7 +16,7 @@ export class CartController {
 
       return res.json(cart)
     } catch (error) {
-      return res.status(404).send()
+      return res.json({})
     }
   }
 

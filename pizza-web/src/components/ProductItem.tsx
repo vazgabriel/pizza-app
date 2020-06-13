@@ -1,13 +1,15 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { FaTrashAlt } from 'react-icons/fa'
 import { useSelector, useDispatch } from 'react-redux'
-import { Box, Image, Button, Flex, Icon } from '@chakra-ui/core'
+import { Box, Image, Button, Flex, Icon, useToast } from '@chakra-ui/core'
 
-import { AppState } from '../store/ducks'
-import { Item } from '../store/ducks/cart'
-import { Product } from '../store/ducks/products'
 import RemoveProductDialog from './RemoveProductDialog'
-import { addItem, updateItem, removeItem } from '../store/ducks/cart'
+
+import { sagaMiddleware } from '../store'
+import { AppState } from '../store/ducks'
+import { removeItem } from '../store/sagas/cart'
+import { Product } from '../store/ducks/products'
+import { addItem, updateItem, Item } from '../store/ducks/cart'
 
 interface Props {
   product: Product
@@ -22,12 +24,25 @@ export default function ProductItem({
   setToDeleteId,
   itemCart,
 }: Props) {
+  const toast = useToast()
   const dispatch = useDispatch()
+  const [loading, setLoading] = useState(false)
   const USD = useSelector((state: AppState) => state.config.USD)
 
   const onClose = (remove?: boolean) => {
     if (remove) {
-      dispatch(removeItem(toDeleteId))
+      setLoading(true)
+      sagaMiddleware.run<any>(removeItem, toDeleteId, (error?: string) => {
+        if (error) {
+          setLoading(false)
+          toast({
+            title: 'Error',
+            description: error,
+            status: 'error',
+            duration: 6000,
+          })
+        }
+      })
     }
     setToDeleteId(0)
   }
@@ -63,6 +78,7 @@ export default function ProductItem({
             {itemCart ? (
               <Flex>
                 <Button
+                  isDisabled={loading}
                   variantColor='teal'
                   variant='link'
                   onClick={() => {
@@ -84,7 +100,7 @@ export default function ProductItem({
                 <Button
                   variantColor='teal'
                   variant='link'
-                  isDisabled={itemCart.quantity > 4}
+                  isDisabled={loading || itemCart.quantity > 4}
                   onClick={() =>
                     dispatch(
                       updateItem({
@@ -108,7 +124,11 @@ export default function ProductItem({
             )}
           </Box>
           {!!itemCart && (
-            <Button variant='link' onClick={() => setToDeleteId(product.id)}>
+            <Button
+              variant='link'
+              isLoading={loading}
+              onClick={() => setToDeleteId(product.id)}
+            >
               <Box as={FaTrashAlt} size='24px' color='red.500' />
             </Button>
           )}

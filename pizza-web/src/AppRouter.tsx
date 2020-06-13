@@ -11,6 +11,8 @@ import Header from './components/Header'
 
 import Home from './pages/Home'
 import Checkout from './pages/Checkout'
+import OrderHistory from './pages/OrderHistory'
+
 import { sagaMiddleware } from './store'
 import { renewToken } from './store/sagas/user'
 import { getUSDConfig } from './store/sagas/config'
@@ -45,6 +47,9 @@ export default function AppRouter() {
           </Route>
           <Route path='/checkout' exact>
             <Checkout />
+          </Route>
+          <Route path='/order-history' exact>
+            <OrderHistory />
           </Route>
           <Route path='*'>
             <Redirect to='/' />

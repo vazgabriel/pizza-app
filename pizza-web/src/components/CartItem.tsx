@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { FaTrashAlt } from 'react-icons/fa'
 import { useSelector, useDispatch } from 'react-redux'
 import {
@@ -10,12 +10,15 @@ import {
   Flex,
   Heading,
   ListItem,
+  useToast,
 } from '@chakra-ui/core'
 
-import { AppState } from '../store/ducks'
-import { Item } from '../store/ducks/cart'
 import RemoveProductDialog from './RemoveProductDialog'
-import { updateItem, removeItem } from '../store/ducks/cart'
+
+import { AppState } from '../store/ducks'
+import { sagaMiddleware } from '../store'
+import { removeItem } from '../store/sagas/cart'
+import { updateItem, Item } from '../store/ducks/cart'
 
 interface Props {
   item: Item
@@ -24,12 +27,25 @@ interface Props {
 }
 
 export default function CartItem({ item, toDeleteId, setToDeleteId }: Props) {
+  const toast = useToast()
   const dispatch = useDispatch()
+  const [loading, setLoading] = useState(false)
   const USD = useSelector((state: AppState) => state.config.USD)
 
   const onClose = (remove?: boolean) => {
     if (remove) {
-      dispatch(removeItem(toDeleteId))
+      setLoading(true)
+      sagaMiddleware.run<any>(removeItem, toDeleteId, (error?: string) => {
+        if (error) {
+          setLoading(false)
+          toast({
+            title: 'Error',
+            description: error,
+            status: 'error',
+            duration: 6000,
+          })
+        }
+      })
     }
     setToDeleteId(0)
   }
@@ -56,6 +72,7 @@ export default function CartItem({ item, toDeleteId, setToDeleteId }: Props) {
         <Flex justify='space-between' pt='16px'>
           <Box>
             <Button
+              isDisabled={loading}
               variantColor='teal'
               variant='link'
               onClick={() => {
@@ -77,7 +94,7 @@ export default function CartItem({ item, toDeleteId, setToDeleteId }: Props) {
             <Button
               variantColor='teal'
               variant='link'
-              isDisabled={quantity > 4}
+              isDisabled={loading || quantity > 4}
               onClick={() =>
                 dispatch(
                   updateItem({
@@ -90,7 +107,11 @@ export default function CartItem({ item, toDeleteId, setToDeleteId }: Props) {
               <Icon name='add' />
             </Button>
           </Box>
-          <Button variant='link' onClick={() => setToDeleteId(product.id)}>
+          <Button
+            variant='link'
+            isLoading={loading}
+            onClick={() => setToDeleteId(product.id)}
+          >
             <Box as={FaTrashAlt} size='24px' color='red.500' />
           </Button>
         </Flex>

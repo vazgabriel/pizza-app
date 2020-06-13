@@ -1,5 +1,6 @@
 import { BaseAction } from '../action'
 import { Product } from './products'
+import { LOGOUT } from './user'
 
 export const SET_CART = 'cart/SET_CART'
 export const ADD_ITEM = 'cart/ADD_ITEM'
@@ -12,6 +13,7 @@ export interface Item {
   quantity: number
   comments?: string
   createdAt?: string
+  dirty?: boolean
   product: Product
 }
 
@@ -30,12 +32,17 @@ export default function reducer(state = INITIAL_STATE, action: BaseAction) {
     case SET_CART:
       return { ...state, ...action.payload }
     case ADD_ITEM:
-      return { ...state, items: [...state.items, action.payload] }
+      return {
+        ...state,
+        items: [...state.items, { ...action.payload, dirty: true }],
+      }
     case UPDATE_ITEM:
       return {
         ...state,
         items: state.items.map((e) =>
-          e.productId === action.payload.productId ? action.payload : e
+          e.productId === action.payload.productId
+            ? { ...action.payload, dirty: true }
+            : e
         ),
       }
     case REMOVE_ITEM:
@@ -43,6 +50,8 @@ export default function reducer(state = INITIAL_STATE, action: BaseAction) {
         ...state,
         items: state.items.filter((e) => e.productId !== action.payload),
       }
+    case LOGOUT:
+      return { ...INITIAL_STATE }
     default:
       return state
   }

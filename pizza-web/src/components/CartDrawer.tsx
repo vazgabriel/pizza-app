@@ -55,6 +55,11 @@ export default function CartDrawer({ isOpen, onClose }: Props) {
 
         <DrawerBody>
           <Flex flexDir='column' justify='space-between' h='100%'>
+            {cart.items.length === 0 && (
+              <Heading as='p' size='sm' color='gray.700'>
+                You don't have any products in the cart, try adding some
+              </Heading>
+            )}
             {/* 100vh = all screen, 62px = header, 72px = footer, 66px = prices, 1rem paddings */}
             <List
               spacing={3}

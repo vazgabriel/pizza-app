@@ -1,9 +1,12 @@
 import { call, put, select, delay } from 'redux-saga/effects'
 
 import { api } from '../../api'
-import { login } from '../ducks/user'
 import { AppState } from '../ducks'
+import { login } from '../ducks/user'
 import { errorMessage } from '../../utils/error'
+
+import { loadCart } from './cart'
+import { sagaMiddleware } from '..'
 
 interface LoginPayload {
   email: string
@@ -22,6 +25,7 @@ export function* loginUser(
   try {
     const response = yield call(api.post, '/auth/login', payload)
     yield put(login(response.data))
+    sagaMiddleware.run<any>(loadCart)
     cb()
   } catch (error) {
     cb(errorMessage(error))
@@ -35,6 +39,7 @@ export function* registerUser(
   try {
     const response = yield call(api.post, '/auth/register', payload)
     yield put(login(response.data))
+    sagaMiddleware.run<any>(loadCart)
     cb()
   } catch (error) {
     cb(errorMessage(error))
@@ -59,6 +64,7 @@ export function* renewToken() {
         },
       })
       yield put(login(response.data))
+      sagaMiddleware.run<any>(loadCart)
 
       retries = 10
     } catch (error) {
