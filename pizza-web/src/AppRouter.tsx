@@ -10,6 +10,7 @@ import { Box, useToast } from '@chakra-ui/core'
 import Header from './components/Header'
 
 import Home from './pages/Home'
+import Login from './pages/Login'
 import Checkout from './pages/Checkout'
 import OrderHistory from './pages/OrderHistory'
 
@@ -44,6 +45,9 @@ export default function AppRouter() {
         <Switch>
           <Route path='/' exact>
             <Home />
+          </Route>
+          <Route path='/login' exact>
+            <Login />
           </Route>
           <Route path='/checkout' exact>
             <Checkout />

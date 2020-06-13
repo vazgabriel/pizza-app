@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
-import { FaShoppingCart, FaUser } from 'react-icons/fa'
+import { FaShoppingCart, FaUser, FaSignInAlt } from 'react-icons/fa'
 import {
   Box,
   Flex,
@@ -79,7 +79,7 @@ export default function Header() {
               </Flex>
             )}
           </Box>
-          {!!user.token && (
+          {!!user.token ? (
             <Menu>
               <MenuButton as={Box}>
                 <Box
@@ -106,6 +106,14 @@ export default function Header() {
                 </MenuGroup>
               </MenuList>
             </Menu>
+          ) : (
+            <Box
+              as={FaSignInAlt}
+              aria-label='Login'
+              cursor='pointer'
+              size='28px'
+              onClick={() => history.push('/login')}
+            />
           )}
         </Stack>
       </Flex>
