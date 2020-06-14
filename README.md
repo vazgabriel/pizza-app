@@ -14,11 +14,22 @@ An app to order your favorite pizza in React + Node.js (using Typescript)
 
 You will have a specific README.md in each of the folders that will explain how to run
 
-### Have fun :)
+## Deploying
 
-[Github](https://github.com/vazgabriel)
+### Frontend
 
-[LinkedIn](https://www.linkedin.com/in/gabrielcvaz)
+```bash
+cd pizza-web
+yarn build
+firebase deploy
+```
+
+### Backend
+
+```bash
+# Have all updates inside Git
+git subtree push --prefix pizza-api heroku master
+```
 
 ## Architecture
 
@@ -99,3 +110,9 @@ class Checkout {
 - Implement a micro-service to calculate currencies (E.g current value for USD, BRL, ...)
 - Implement a logic for delivery price (now we just send the same always)
 - Implement a real-time system that updates whenever there's a new purchase, and control purchase status (Preparing, Sending, Done)
+
+### Have fun :)
+
+[Github](https://github.com/vazgabriel)
+
+[LinkedIn](https://www.linkedin.com/in/gabrielcvaz)
