@@ -8,7 +8,9 @@ import { Checkout, Currency, CURRENCIES } from '../../entity/Checkout'
 export class CheckoutController {
   static async getPurchaseHistory(req: Request, res: Response) {
     const purchaseHistory = await getRepository(Checkout).find({
-      userId: req.user!.id,
+      where: { userId: req.user!.id },
+      order: { createdAt: 'DESC' },
+      relations: ['cart'],
     })
 
     return res.json(purchaseHistory)
@@ -27,7 +29,7 @@ export class CheckoutController {
         userId: req.user!.id,
       },
       cache: MONTHLY,
-      relations: ['cart']
+      relations: ['cart'],
     })
 
     if (!purchase) {
@@ -65,13 +67,14 @@ export class CheckoutController {
 
     let checkout = new Checkout()
 
-    const actualDelivery = await CheckoutController.getPrice(address)
+    let actualDelivery = await CheckoutController.getPrice(address)
     let actualFoodPrice = cart.items.reduce(
       (a, c) => a + c.product.price * c.quantity,
       0
     )
 
     if (currency !== Currency.EURO) {
+      actualDelivery *= await CheckoutController.getCurrencyValue(currency)
       actualFoodPrice *= await CheckoutController.getCurrencyValue(currency)
     }
 
@@ -81,10 +84,10 @@ export class CheckoutController {
 
     checkout.address = address
     checkout.address_2 = !!address_2 ? address_2 : null
-    checkout.foodPrice = foodPrice
-    checkout.deliveryPrice = deliveryPrice
+    checkout.foodPrice = parseInt(foodPrice, 10)
+    checkout.deliveryPrice = parseInt(deliveryPrice, 10)
     checkout.currency = currency
-    checkout.totalPrice = foodPrice + deliveryPrice
+    checkout.totalPrice = checkout.foodPrice + checkout.deliveryPrice
     checkout.cart = cart
     checkout.user = user
 

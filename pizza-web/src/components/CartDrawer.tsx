@@ -90,7 +90,7 @@ export default function CartDrawer({ isOpen, onClose }: Props) {
           <Button variant='outline' mr={3} onClick={onClose}>
             Close
           </Button>
-          <Button color='teal' onClick={onCheckout}>
+          <Button color='teal' onClick={onCheckout} isDisabled={cart.items.length === 0}>
             Checkout
           </Button>
         </DrawerFooter>

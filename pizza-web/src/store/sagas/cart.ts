@@ -1,4 +1,4 @@
-import { put, all, call, select } from 'redux-saga/effects'
+import { put, call, select } from 'redux-saga/effects'
 
 import {
   removeItem as _removeItem,
@@ -11,7 +11,6 @@ import { AppState } from '../ducks'
 import { errorMessage } from '../../utils/error'
 
 export function* _syncCart() {
-  console.log('executed')
   const { token, cart } = yield select((state: AppState) => ({
     token: state.user.token,
     cart: state.cart,
@@ -28,25 +27,36 @@ export function* _syncCart() {
       return
     }
 
-    // Run creates/updates in parallel
-    yield all(
-      nonSyncItems.map((i) =>
-        call(
-          i.id ? api.patch : api.post,
-          `/cart${i.id ? `/${cart.id}/${i.id}` : ''}`,
-          {
-            quantity: i.quantity,
-            comments: !!i.comments ? i.comments : undefined,
-            productId: i.id ? undefined : i.productId,
+    const { data } = yield call(api.get, '/cart', {
+      headers: {
+        Authorization: token,
+      },
+    })
+
+    for (const i of nonSyncItems) {
+      const item = (data.items || []).find((e: Item) => e.productId === i.productId)
+
+      if (!!item) {
+        i.id = item.id
+      }
+
+      const response = yield call(
+        i.id ? api.patch : api.post,
+        `/cart${i.id ? `/${cart.id}/${i.id}` : ''}`,
+        {
+          quantity: i.quantity,
+          comments: !!i.comments ? i.comments : undefined,
+          productId: i.id ? undefined : i.productId,
+        },
+        {
+          headers: {
+            Authorization: token,
           },
-          {
-            headers: {
-              Authorization: token,
-            },
-          }
-        )
+        }
       )
-    )
+
+      cart.id = response.data.id
+    }
 
     const response = yield call(api.get, '/cart', {
       headers: {

@@ -66,13 +66,14 @@ export function addItem(product: Product) {
     product: { ...product },
     productId: product.id,
     quantity: 1,
+    dirty: true,
   }
 
   return { type: ADD_ITEM, payload }
 }
 
 export function updateItem(payload: Item) {
-  return { type: UPDATE_ITEM, payload }
+  return { type: UPDATE_ITEM, payload: { ...payload, dirty: true } }
 }
 
 export function removeItem(payload: number) {

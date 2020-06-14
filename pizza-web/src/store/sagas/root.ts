@@ -4,9 +4,8 @@ import { _syncCart } from './cart'
 import { ADD_ITEM, UPDATE_ITEM } from '../ducks/cart'
 export function* rootSaga() {
   function* delayedSyncCart() {
-    console.log('called')
     try {
-      yield delay(5000)
+      yield delay(3000)
       yield call(_syncCart)
     } catch (error) {} // Generate error on cancel
   }

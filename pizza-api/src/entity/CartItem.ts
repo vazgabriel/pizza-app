@@ -5,12 +5,14 @@ import {
   CreateDateColumn,
   ManyToOne,
   JoinColumn,
+  Index,
 } from 'typeorm'
 
 import { Cart } from './Cart'
 import { Product } from './Product'
 
 @Entity()
+@Index(['cartId', 'productId'], { unique: true })
 export class CartItem {
   @PrimaryGeneratedColumn()
   id: number

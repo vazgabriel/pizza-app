@@ -6,7 +6,7 @@ import { login } from '../ducks/user'
 import { errorMessage } from '../../utils/error'
 
 import { loadCart } from './cart'
-import { sagaMiddleware } from '..'
+import { getPurchaseHistory } from './checkout'
 
 interface LoginPayload {
   email: string
@@ -25,7 +25,10 @@ export function* loginUser(
   try {
     const response = yield call(api.post, '/auth/login', payload)
     yield put(login(response.data))
-    sagaMiddleware.run<any>(loadCart)
+
+    yield call(loadCart)
+    yield call(getPurchaseHistory)
+
     cb()
   } catch (error) {
     cb(errorMessage(error))
@@ -39,7 +42,10 @@ export function* registerUser(
   try {
     const response = yield call(api.post, '/auth/register', payload)
     yield put(login(response.data))
-    sagaMiddleware.run<any>(loadCart)
+
+    yield call(loadCart)
+    yield call(getPurchaseHistory)
+
     cb()
   } catch (error) {
     cb(errorMessage(error))
@@ -63,8 +69,11 @@ export function* renewToken() {
           Authorization: token,
         },
       })
+
       yield put(login(response.data))
-      sagaMiddleware.run<any>(loadCart)
+
+      yield call(loadCart)
+      yield call(getPurchaseHistory)
 
       retries = 10
     } catch (error) {

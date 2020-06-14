@@ -9,7 +9,7 @@ import { rootSaga } from './sagas/root'
 const persistConfig: PersistConfig<AppState> = {
   key: 'pizza@app',
   storage,
-  whitelist: ['cart', 'config', 'products', 'user'],
+  whitelist: ['cart', 'config', 'products', 'purchaseHistory', 'user'],
 }
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)
