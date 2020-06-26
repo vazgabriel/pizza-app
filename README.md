@@ -2,6 +2,10 @@
 
 An app to order your favorite pizza in React + Node.js (using Typescript)
 
+## Live Version
+
+You can try the live version [here](https://pizza-app-vaz.web.app/). (Be aware that it can take a long time to load the first time, because the backend is on Heroku and may be in "sleep mode")
+
 ## What you need to have to run it locally?
 
 [Node.js v12](https://nodejs.org/en/download/)
