@@ -25,7 +25,7 @@
     "typeorm": "0.2.25",
     "typeorm-seeding": "^1.6.1",
     "typescript": "3.3.3333",
-    "validator": "^13.1.0"
+    "validator": "^13.7.0"
   },
   "scripts": {
     "dev": "ts-node-dev --respawn --transpileOnly src/index.ts",
